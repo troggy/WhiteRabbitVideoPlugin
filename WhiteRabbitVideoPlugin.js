@@ -1,5 +1,9 @@
 // ----------------
 // White Rabbit Video Plugin
+// Prerequisites:
+// jQuery
+// White Rabbit's index.mjs downloaded locally
+// Plyr's css & js downloaded locally https://plyr.io/
 // Fill in: ./path/to/white/rabbit/index.mjs - ./path/to/plyr.css - path/to/plyr.js
 // usage: $('.white-rabbit').WhiteRabbitVideoPlugin({ videoID:'xyz', thumbID:'abc', imdbID:'tt123', title:'film title' });
 // in html: insert tags like <p class="white-rabbit"></p> or <div class="white-rabbit"></div> where needed
