@@ -19,7 +19,7 @@
 		options = $.extend({}, defaults, options);
 		if (!client) {
 			let { WhiteRabbitClient } = await import('./path/to/white/rabbit/index.mjs');
-      //uncomment "host" for test environment
+			//uncomment "host" for test environment
 			client = new WhiteRabbitClient({ /*host: 'https://staging-wallet.whiterabbit.one'*/ });
 		}
 		let requestingPayment = false, $this = this;
