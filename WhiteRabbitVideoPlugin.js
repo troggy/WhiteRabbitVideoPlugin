@@ -13,12 +13,13 @@
 		quality: { default: 720, options: [720, 480] }
 		//required: videoID, thumbID, imdbID, title
 	};
-	const template = '<video disablePictureInPicture controls controlsList="nodownload" data-poster="https://vz-cb1fdbea-917.b-cdn.net/|videoID|/thumbnail_|thumbID|.jpg"><source type="video/mp4" size="480" src = "https://vz-cb1fdbea-917.b-cdn.net/|videoID|/play_480p.mp4" /><source type="video/mp4" size="720" src="https://vz-cb1fdbea-917.b-cdn.net/|videoID|/play_720p.mp4" /><source type="application/x-mpegURL" src="https://vz-cb1fdbea-917.b-cdn.net/|videoID|/playlist.m3u8"></video>';
+	const template = '<video crossorigin disablePictureInPicture controls controlsList="nodownload" data-poster="https://vz-cb1fdbea-917.b-cdn.net/|videoID|/thumbnail_|thumbID|.jpg"><source type="video/mp4" size="480" src = "https://vz-cb1fdbea-917.b-cdn.net/|videoID|/play_480p.mp4" /><source type="video/mp4" size="720" src="https://vz-cb1fdbea-917.b-cdn.net/|videoID|/play_720p.mp4" /><source type="application/x-mpegURL" src="https://vz-cb1fdbea-917.b-cdn.net/|videoID|/playlist.m3u8"></video>';
 	let client;
 	$.fn.WhiteRabbitVideoPlugin = async function (options) {
+    console.log(options);
 		options = $.extend({}, defaults, options);
 		if (!client) {
-			let { WhiteRabbitClient } = await import('./path/to/white/rabbit/index.mjs');
+			let { WhiteRabbitClient } = await import('https://unpkg.com/@whiterabbitjs/client@2.40.1/dist/index.min.mjs');
 			//uncomment "host" for test environment
 			client = new WhiteRabbitClient({ /*host: 'https://staging-wallet.whiterabbit.one'*/ });
 		}
@@ -27,6 +28,11 @@
 			const strvideo = template.replace(/\|videoID\|/g, options.videoID).replace(/\|thumbID\|/g, options.thumbID)
 			$this.each(function () {
 				const $video = $(strvideo).appendTo($(this)), player = new Plyr($video.get(0), { title: options.title, quality: options.quality });
+        if (options.captions) {
+          options.captions.forEach(function (captionId) {
+            $video.append(`<track kind="captions" label="English" src="https://vz-cb1fdbea-917.b-cdn.net/${options.videoID}/captions/${captionId}" srclang="EN" default>`);
+          });
+        }
 				$video.on('play', async function (ev) {
 					const paid = Boolean(localStorage.getItem('wr-' + options.imdbID) || false);
 					if (paid) return;
@@ -53,9 +59,9 @@
 			$('<link/>', {
 				rel: 'stylesheet',
 				type: 'text/css',
-				href: './path/to/plyr.css'
+				href: 'https://cdn.plyr.io/3.6.12/plyr.css'
 			}).appendTo('head');
-			$.getScript('./path/to/plyr.js', scriptLoaded);
+			$.getScript('https://cdn.plyr.io/3.6.12/plyr.js', scriptLoaded);
 		} else scriptLoaded();
 	};
 })(jQuery);
